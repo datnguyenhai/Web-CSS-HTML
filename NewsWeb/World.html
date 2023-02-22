@@ -1,0 +1,179 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.3.1/css/all.css" integrity="sha384-mzrmE5qonljUremFsqc01SB46JvROS7bZs3IO2EmfFsd15uHvIt+Y8vEf7N7fWAU" crossorigin="anonymous">
+    <link rel="stylesheet" type="text/css" href="main.css"> 
+    <link rel="stylesheet" type="text/css" href="modal.css">
+    <link rel="stylesheet" type="text/css" href="loading.css">
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+    <script type="text/javascript" src="load.js"></script>
+    <title>Assignment4/World</title>
+</head>
+<body class="preload">
+<div class="loader">
+    <span class="fas fa-spinner xoay icon"></span>
+</div>
+    <div id="toolbar">
+        <div class="left-toolbar">
+            <ul>
+                <li><a href="#">Magazine</a></li>
+                <li><a href="#">Travel</a></li>
+               
+            </ul>
+        </div>
+    </div>
+    <div id="header">
+        <center>
+            <br>
+             <a href="#">MY NEWS
+                <span>
+                    <button id="btnSearch">
+                        <img src="search.png" />
+                    </button>
+                    <div id="myModal" class="modal">
+                        <div class="modal-content">
+                            <span class="close">&times;</span>
+                            <input type="text" id="txtType" placeholder="search" style="width: 400px; padding-left: 10px; height: 50px;">
+                            <button id="search">Search</button>
+                        </div>
+                    </div>
+                </span>
+            </a>
+        </center>
+           
+    </div>
+    <div id="menu">
+        <ul class="main-menu">
+            <li><a href="MAIN.html">Home</a></li>
+            <li><a href="Bussiness.html">Business</a></li>
+            <li><a href="Entertainment.html">Entertainment</a></li>
+            <li><a href="Health.html">Health</a></li>
+            <li><a href="Nations.html">Nations</a></li>
+            <li><a href="Technology.html">Technology</a></li>
+            <li><a href="Sport.html">Sport</a></li>
+            <li><a href="Science.html">Science</a></li>
+            <li><a href="#">World</a></li>
+        </ul>
+    </div>
+    <div id="main-content" class="row" style="height: auto;">
+        <div class="col-1 col-s-0 col-ss-0 sec-1" style=" height:800px; background-image: url(https://s3.amazonaws.com/codecademy-content/courses/ltp/img/lodging.png); position: relative;">
+            
+        </div>
+        <div class="col-10 col-s-11 col-ss-12 sec-1">
+            <ul id="listNews" style="margin-top: 0px;">
+            
+            </ul>
+        </div>
+        <div class="col-1 col-s-1 col-ss-0 sec-1" style="height:800px; background-image: url(https://s3.amazonaws.com/codecademy-content/courses/ltp/img/lodging.png); position: relative;">
+            
+        </div>
+        <div class="clear"></div>
+    <!--<li id="content" class="row" style="list-style-type: none;">
+            <div class="col-4 group-1">
+                <a href="#">aaa</a>
+            </div>
+            <div class="col-8 group-1">
+                <p>bbb</p>
+            </div>
+        </li> -->
+    </div>
+    <script>
+        var xmlhttp = new XMLHttpRequest();
+        var url = "https://gnews.io/api/v4/top-headlines?&token=af815c178b1857d09cc1721d600c88df&topic=world&lang=en";
+        xmlhttp.open('GET',url,true);
+        xmlhttp.onload = function(){
+            var ourData = JSON.parse(xmlhttp.responseText);
+            renderHTML(ourData);
+            
+        };
+        xmlhttp.send();
+        function renderHTML(data) {
+            var outImg = "";
+            var out = "";
+            var i,ii;
+            for(i = 0; i < data.articles.length; i++) {
+                outImg += "<li id=\"content\" class=\"row\" style=\"list-style-type:none;\">"
+                        + "<div class=\"col-4 group-1\">"
+                        + "<a href="+data.articles[i].url+" target=\"_blank\" rel=\"noopener noreferrer\"><img src="+data.articles[i].image+" style=\"width:100%; height:250px; padding-right:20px;\"></a>"
+                        + "</div>"
+                        + "<div class=\"col-8 group-1\" style=\"margin-top:5px; margin-left:0px\">"
+                        + "<h3><a href="+data.articles[i].url+" target=\"_blank\" rel=\"noopener noreferrer\">"+data.articles[i].title+"</a></h3>"
+                        + "<p>"+data.articles[i].description+"</p>"
+                        + "<em style=\"font-style:italic;font-size:12px;\">Published At: "+data.articles[i].publishedAt+"</em>"
+                        + "<p style=\"line-height:20px; font-size:15px; color: #6b6b47;\">"+data.articles[i].content+"</p>"
+                        + "</div>"
+                        + "</li>";
+            }
+            var addInfo = document.getElementById("listNews");
+            addInfo.innerHTML = outImg;
+        }
+    </script>
+    <script>
+        // Get the modal
+        var modal = document.getElementById("myModal");
+        // Get the button that opens the modal
+        var btn = document.getElementById("btnSearch");
+    
+        // Get the button that search the modal
+        var btnSearch = document.getElementById("search");
+        // Get the <span> element that closes the modal
+        var span = document.getElementsByClassName("close")[0];
+        // When the user clicks the button, open the modal 
+        btn.onclick = function() {
+            modal.style.display = "block";
+        }
+    
+        // When the user clicks the button, search the modal 
+        btnSearch.onclick = function() {
+            var getData = document.getElementById("txtType").value;
+            if(getData == "") {
+                modal.style.display= "none"; 
+            } else {
+                var xmlhttpSearch = new XMLHttpRequest();
+                var newUrl = 'https://gnews.io/api/v4/search?q='+getData+'&token=af815c178b1857d09cc1721d600c88df&lang=en';
+                xmlhttpSearch.open('GET',newUrl,true);
+                xmlhttpSearch.onload = function(){
+                var ourDataSearch = JSON.parse(xmlhttpSearch.responseText);
+                searchHTML(ourDataSearch);
+            };
+            xmlhttpSearch.send();
+            modal.style.display= "none";
+            function searchHTML(data) {
+                var outImg = "";
+                var out = "";
+                var i,ii;
+                for(i = 0; i < data.articles.length; i++) {
+                    outImg += "<li id=\"content\" class=\"row\" style=\"list-style-type:none;\">"
+                            + "<div class=\"col-4 group-1\">"
+                            + "<a href="+data.articles[i].url+" target=\"_blank\" rel=\"noopener noreferrer\"><img src="+data.articles[i].image+" style=\"width:100%; height:250px; padding-right:20px;\"></a>"
+                            + "</div>"
+                            + "<div class=\"col-8 group-1\" style=\"margin-top:5px; margin-left:0px\">"
+                            + "<h3><a href="+data.articles[i].url+" target=\"_blank\" rel=\"noopener noreferrer\">"+data.articles[i].title+"</a></h3>"
+                            + "<p>"+data.articles[i].description+"</p>"
+                            + "<em style=\"font-style:italic;font-size:12px;\">Published At: "+data.articles[i].publishedAt+"</em>"
+                            + "<p style=\"line-height:20px; font-size:15px; color: #6b6b47;\">"+data.articles[i].content+"</p>"
+                            + "</div>"
+                            + "</li>";
+                }
+                var addInfo = document.getElementById("listNews");
+                addInfo.innerHTML = outImg;   
+            }
+        } 
+    }
+        // When the user clicks on <span> (x), close the modal
+        span.onclick = function() {
+            modal.style.display = "none";
+        }
+    
+        // When the user clicks anywhere outside of the modal, close it
+        window.onclick = function(event) {
+        if(event.target == modal) {
+            modal.style.display = "none";
+            }   
+        }
+        </script> 
+</body>
+</html>
